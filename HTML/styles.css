@@ -1,0 +1,12 @@
+body {
+    background: black;
+}
+
+#myCanvas {
+    color: white;
+    background: white;
+}
+
+#inputArea {
+    display: block;
+}
