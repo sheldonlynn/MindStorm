@@ -1,0 +1,13 @@
+{
+  "name": "MindStorm",
+  "version": "1.0.0",
+  "description": "Realtime collaboration and brainstorming",
+  "main": "index.js",
+  "repository": "git@github.com:sheldonlynn/mindstorm",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "websocket.io": "^0.2.1"
+  }
+}
