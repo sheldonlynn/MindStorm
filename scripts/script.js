@@ -100,15 +100,28 @@ socket.on('update text', function(data) {
     document.getElementById(data.id).firstChild.value = data.text;
 });
   
-function mouseUp(e) {
+var stopWatch;
+
+function mouseUp() {
+  clearInterval(stopWatch);
   board.removeEventListener('mousemove', divMove, true);
   currBox = null;
 }
 
+function testTimer() {
+  console.log("ayy");
+  if (currBox != null) {
+    var boxCopy = {
+      'id': currBox.id,
+      'x':  currBox.style.left,
+      'y':  currBox.style.top
+    }
+    socket.emit('move box', boxCopy);
+  }
+}
 socket.on('move box', function(box) {
       changePos(box);
 });
-
 function changePos(box) {
   if (box != null) {
     var currBox = document.getElementById(box.id);
@@ -116,6 +129,8 @@ function changePos(box) {
     currBox.style.top = box.y;
   }
 }
+
+
 
 function mouseDown(e) {
   mouseHold = true;
@@ -125,27 +140,20 @@ function mouseDown(e) {
     currBox = currBox.parentElement;
   } else {
     currBox = null;
+    clearInterval(stopWatch);
+    stopWatch = null;
     return;
   }
   currBox.style.zIndex = zIndex++ + "";
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
+    stopWatch = setInterval(function(){ testTimer() }, 42);
   board.addEventListener('mousemove', divMove, true);
 }
 
 function divMove(e) {
   currBox.style.left = (e.pageX - xPos) + 'px';
   currBox.style.top = (e.pageY - yPos)  + 'px';
-  if (currBox != null) {
-    var boxCopy = {
-      'id': currBox.id,
-      'x':  currBox.style.left,
-      'y':  currBox.style.top
-    } 
-  }
-  if (boxCopy != null) {
-    socket.emit('move box', boxCopy);
-  }
 }
 
 
