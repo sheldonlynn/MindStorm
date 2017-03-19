@@ -99,23 +99,44 @@ function updateText(e) {
 }
 
 function mouseUp(e) {
+  console.log(currBox);
+  if (currBox != null) {
+    var boxCopy = {
+      'id': currBox.id,
+      'x':  currBox.style.left,
+      'y':  currBox.style.top
+    } 
+  }
+  if (boxCopy != null) {
+    socket.emit('move box', boxCopy);
+    socket.on('move box', function(box) {
+      changePos(box);
+    });
+  }
   board.removeEventListener('mousemove', divMove, true);
+  currBox = null;
 }
 
+
+
 function changePos(box) {
-  box.style.left = box.x;
-  box.style.top = box.y;
+  if (box != null) {
+    var currBox = document.getElementById(box.id);
+    currBox.style.left = box.x;
+    currBox.style.top = box.y;
+  }
 }
 
 function mouseDown(e) {
   mouseHold = true;
   currBox = e.target;
+  console.log(currBox);
   if (currBox.className == "actionButtons") {
     currBox = currBox.parentElement;
-  } else if (currBox.nodeName.toLowerCase() == 'textarea') {
-    currBox = currBox.parentElement.parentElement;
+  } else {
+    currBox = null;
+    return;
   }
-
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
   board.addEventListener('mousemove', divMove, true);
@@ -124,18 +145,6 @@ function mouseDown(e) {
 function divMove(e) {
   currBox.style.left = (e.pageX - xPos) + 'px';
   currBox.style.top = (e.pageY - yPos)  + 'px';
-
-  var boxCopy = {
-    'id': currBox.id,
-    'x':  currBox.style.left,
-    'y':  currBox.style.top
-  }
-  if (boxCopy != null) {
-    socket.emit('move box', boxCopy);
-    socket.on('move box', function(box) {
-    changePos(box);
-    });
-  }
 }
 
 
