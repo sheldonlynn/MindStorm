@@ -30,8 +30,8 @@ board.addEventListener('click', createBox, false);
 function createBox(e) {
   if (timerStarted) {
     if (!mouseHold) {
-      drawBox('box' + boxArray.length, e.pageX, e.pageY, "");
-      boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': val, 'deleted': false});
+      drawBox('box' + boxArray.length, e.pageX, e.pageY, '');
+      boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': '', 'deleted': false});
       socket.emit('new box', boxArray);
       
     }
@@ -116,7 +116,8 @@ function testTimer() {
     var boxCopy = {
       'id': currBox.id,
       'x':  currBox.style.left,
-      'y':  currBox.style.top
+      'y':  currBox.style.top,
+      'zIndex': currBox.style.zIndex
     }
     socket.emit('move box', boxCopy);
   }
@@ -129,6 +130,7 @@ function changePos(box) {
     var currBox = document.getElementById(box.id);
     currBox.style.left = box.x;
     currBox.style.top = box.y;
+    currBox.style.zIndex = box.zIndex;
   }
 }
 
