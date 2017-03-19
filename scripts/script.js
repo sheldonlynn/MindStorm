@@ -61,20 +61,16 @@ function drawBox(id, x, y, text) {
 
 
 function mouseUp(e) {
-  if (timerStarted) {
-    wrapper.box = currBox;
-    board.removeEventListener('mousemove', divMove, true);
-  }
+  wrapper.box = currBox;
+  board.removeEventListener('mousemove', divMove, true);
 }
 
 function mouseDown(e) {
-  if (timerStarted) {
-    mouseHold = true;
-    currBox = e.target;
-    xPos = e.clientX - currBox.offsetLeft;
-    yPos = e.clientY - currBox.offsetTop;
-    board.addEventListener('mousemove', divMove, true);
-  }
+  mouseHold = true;
+  currBox = e.target;
+  xPos = e.clientX - currBox.offsetLeft;
+  yPos = e.clientY - currBox.offsetTop;
+  board.addEventListener('mousemove', divMove, true);
 }
 
 function divMove(e) {

@@ -4,6 +4,12 @@
     background: white;
 }
 
+#timer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .box {
   display: flex;
   flex-direction: row;
