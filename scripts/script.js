@@ -4,9 +4,10 @@ var xPos = 0;
 var yPos = 0;
 var currBox;
 var mouseHold = false;
-var textArea = '<textarea rows="8" cols="15"></textarea>';
+var zIndex = 5;
+var textArea = '<textarea rows="7" cols="15"></textarea>';
 var actionButtons = '<div class="actionButtons"><button class="delete" onClick="deleteThisBox(this)">' +
-  'X</button><button class="post" onClick="updateText(this)">Y</button></div>';
+  '&#10005;</button><button class="post" onClick="updateText(this)">&#10003;</button></div>';
 
 var boxArray = [
   //{"id": "box0", "x": 5, "y": 10, "text": "potato"}
@@ -29,8 +30,7 @@ board.addEventListener('click', createBox, false);
 function createBox(e) {
   if (timerStarted) {
     if (!mouseHold) {
-      var val = Math.random();
-      drawBox('box' + boxArray.length, e.pageX, e.pageY, val);
+      drawBox('box' + boxArray.length, e.pageX, e.pageY, "");
       boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': val, 'deleted': false});
       socket.emit('new box', boxArray);
       
@@ -127,6 +127,7 @@ function mouseDown(e) {
     currBox = null;
     return;
   }
+  currBox.style.zIndex = zIndex++ + "";
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
   board.addEventListener('mousemove', divMove, true);

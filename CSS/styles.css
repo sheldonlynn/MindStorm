@@ -59,6 +59,8 @@ textArea {
   background-color: #ffffa5;
   font-family: Avenir, "Century Gothic", sans-serif;
   font-size: 0.9em;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 .actionButtons {
@@ -70,18 +72,20 @@ textArea {
   justify-content: space-between;
 }
 
-.post {
+.post, .delete {
   border: none;
   background: none;
-  margin-bottom: 0.5em;
   color: #b2b27b;
+  font-size: 1em;
+  outline: none;
+}
+
+.post {
+  margin-top: 0.5em;
 }
 
 .delete {
-  border: none;
-  background: none;
-  margin-top: 0.5em;
-  color: #b2b27b;
+  margin-bottom: 0.5em;
 }
 
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
