@@ -138,44 +138,15 @@ function divMove(e) {
 }
 
 
-var seconds = 2;
-var minutes = 0;
+var seconds = 0;
+var minutes = 5;
 var watch = document.getElementById('h1');
 var start = document.getElementById('start');
 var timerStarted;
 
-
-function countDown() {
-  seconds--;
-  if (seconds < 0 && minutes > 0) {
-    seconds = 59;
-    minutes--;
-  }
-  if (seconds < 10) {
-    document.getElementById('clock').innerHTML = minutes + ':0' + seconds;
-  } else {
-    document.getElementById('clock').innerHTML = minutes + ':' + seconds;
-  }
-
-  if (seconds == 0 && minutes == 0) {
-    seconds = 10;
-    minutes = 0;
-    timerStarted = false;
-    document.getElementById('clock').innerHTML = "Time's up";
-
-    var textareas = document.getElementsByTagName('textarea');
-
-    for (var i = 0; i < textareas.length; i++) {
-      textareas[i].readOnly = true;
-    }
-    return;
-
-  }
-  timer();
-}
-
 start.onclick = function() {
   if (!timerStarted) {
+    timerStarted = true;
     var timer = setInterval(function() {
       seconds--;
       if (seconds < 0 && minutes > 0) {
@@ -188,11 +159,9 @@ start.onclick = function() {
         document.getElementById('clock').innerHTML = minutes + ':' + seconds;
       }
 
-      if (seconds == 0 && minutes == 0) {
-        clearInterval(timer);
-        seconds = 10;
-        minutes = 0;
+      if (seconds <= 0 && minutes <= 0) {
         timerStarted = false;
+        clearInterval(timer);
         document.getElementById('clock').innerHTML = "Time's up";
 
         var textareas = document.getElementsByTagName('textarea');
