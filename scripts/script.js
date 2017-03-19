@@ -45,7 +45,7 @@ socket.on('loaded', function(timerFinish) {
 });
 
 function createBox(e) {
-  if (!timerFinished || timerStarted) {
+  if (!timerFinished && timerStarted) {
     if (!mouseHold) {
       drawBox('box' + boxArray.length, e.pageX, e.pageY, '');
       boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': '', 'deleted': false});
@@ -175,7 +175,7 @@ function divMove(e) {
   currBox.style.top = (e.pageY - yPos)  + 'px';
 }
 
-var timerStarted;
+var timerStarted = false;
 
 start.onclick = function() {
   socket.emit('timer start');
@@ -186,6 +186,7 @@ socket.on('timer finish', function(timerFinish) {
 });
 
 socket.on('update clock', function(time) {
+  timerStarted = true;
   console.log(time);
   if (time.seconds < 10) {
     document.getElementById('clock').innerHTML = time.minutes + ':0' + time.seconds;
