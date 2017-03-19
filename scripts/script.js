@@ -33,18 +33,19 @@ function createBox(e) {
       drawBox('box' + boxArray.length, e.pageX, e.pageY, val);
       boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': val, 'deleted': false});
       socket.emit('new box', boxArray);
-      socket.on('new box', function(boxes) {
+      
+    }
+    mouseHold = false;
+  }
+}
+socket.on('new box', function(boxes) {
         for(var i = boxArray.length; i < boxes.length; i++) {
           box = boxes[i];
           drawBox(box.id, box.x, box.y, box.text);
           boxArray.push(box);
         }
       });
-    }
-    mouseHold = false;
-  }
-}
-
+      
 function deleteThisBox(e) {
   var box = e.parentElement.parentElement;
   socket.emit('delete box', box.id);
@@ -93,31 +94,20 @@ function updateText(e) {
   var currBox = e.parentElement.parentElement;
   var textValue = currBox.firstChild.value;
   socket.emit('update text', {'id': currBox.id, 'text': textValue});
-  socket.on('update text', function(data) {
-    document.getElementById(data.id).firstChild.value = data.text;
-  });
 }
 
+socket.on('update text', function(data) {
+    document.getElementById(data.id).firstChild.value = data.text;
+});
+  
 function mouseUp(e) {
-  console.log(currBox);
-  if (currBox != null) {
-    var boxCopy = {
-      'id': currBox.id,
-      'x':  currBox.style.left,
-      'y':  currBox.style.top
-    } 
-  }
-  if (boxCopy != null) {
-    socket.emit('move box', boxCopy);
-    socket.on('move box', function(box) {
-      changePos(box);
-    });
-  }
   board.removeEventListener('mousemove', divMove, true);
   currBox = null;
 }
 
-
+socket.on('move box', function(box) {
+      changePos(box);
+});
 
 function changePos(box) {
   if (box != null) {
@@ -145,6 +135,16 @@ function mouseDown(e) {
 function divMove(e) {
   currBox.style.left = (e.pageX - xPos) + 'px';
   currBox.style.top = (e.pageY - yPos)  + 'px';
+  if (currBox != null) {
+    var boxCopy = {
+      'id': currBox.id,
+      'x':  currBox.style.left,
+      'y':  currBox.style.top
+    } 
+  }
+  if (boxCopy != null) {
+    socket.emit('move box', boxCopy);
+  }
 }
 
 
