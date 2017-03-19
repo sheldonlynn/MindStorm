@@ -25,6 +25,7 @@ body {
 textArea {
   overflow: auto;
   resize: none;
+  outline: none;
   border: none;
   border-right: solid 1px #d8d893;
   background-color: #ffffa5;

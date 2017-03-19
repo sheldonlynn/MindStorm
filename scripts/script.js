@@ -4,9 +4,12 @@ var xPos = 0;
 var yPos = 0;
 var currBox;
 var mouseHold = false;
-var textArea = '<textarea rows="9" cols="15">pls fill me bb</textarea>';
+var textArea = '<textarea rows="9" cols="15"></textarea>';
 var actionButtons = '<div class="actionButtons"><button class="post">Y</button></div>';
-var boxArray = [];
+var boxArray = [{"id": "box0", "x": 5, "y": 10, "text": "potato"},
+  {"id": "box1", "x": 75, "y": 30, "text": "potato"},
+  {"id": "box2", "x": 5, "y": 200, "text": "potato"},
+  {"id": "box3", "x": 200, "y": 200, "text": "potato"}];
 var diffArray = [];
 
 var wrapper = {
@@ -18,24 +21,34 @@ board.addEventListener('click', createBox, false);
 
 function createBox(e) {
   if (!mouseHold) {
-    var box = document.createElement('div');
-    box.innerHTML = textArea + actionButtons;
-    box.style.top = e.pageY;
-    box.style.left = e.pageX;
-
-    box.id = "box" + boxIndex++;
-    box.className = "box";
-
-    box.addEventListener('mousedown', mouseDown, false);
-    box.addEventListener('mouseup', mouseUp, false);
-
-    board.appendChild(box);
+    drawBox("box" + boxArray.length, e.pageX, e.pageY, "potato");
   }
   mouseHold = false;
 }
 
-function drawBox(x, y, text) {
+function drawFromArray() {
+  for (var i = 0; i < boxArray.length; i++) {
+    var box = boxArray[i];
+    console.log(box, "box");
+    drawBox(box.id, box.x + "px", box.y + "px", box.text);
+  }
+}
 
+function drawBox(id, x, y, text) {
+  var box = document.createElement('div');
+  box.innerHTML = textArea + actionButtons;
+  box.style.left = x;
+  box.style.top = y;
+
+  box.firstChild.value = text;
+
+  box.id = id;
+  box.className = "box";
+
+  box.addEventListener('mousedown', mouseDown, false);
+  box.addEventListener('mouseup', mouseUp, false);
+
+  board.appendChild(box);
 }
 
 
@@ -55,6 +68,6 @@ function mouseDown(e) {
 }
 
 function divMove(e) {
-  currBox.style.top = (e.pageY - yPos)  + 'px';
   currBox.style.left = (e.pageX - xPos) + 'px';
+  currBox.style.top = (e.pageY - yPos)  + 'px';
 }
