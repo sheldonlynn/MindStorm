@@ -27,7 +27,7 @@ function createBox(e) {
 }
 
 function mouseUp(e) {
-  currBox.removeEventListener('mousemove', divMove, true);
+  board.removeEventListener('mousemove', divMove, true);
 }
 
 function mouseDown(e) {
@@ -35,12 +35,14 @@ function mouseDown(e) {
   currBox = e.target;
   xPos = e.clientX - currBox.offsetLeft;
   yPos = e.clientY - currBox.offsetTop;
-  currBox.addEventListener('mousemove', divMove, true);
+  board.addEventListener('mousemove', divMove, true);
   console.log("ayy");
 }
 
 function divMove(e) {
-  currBox.style.top = (e.clientY - yPos)  + 'px';
-  currBox.style.left = (e.clientX - xPos) + 'px';
+  console.log(e.pageY - yPos + "pageY - yPos");
+  console.log(e.pageX - xPos + "pageX - xPos");
+  currBox.style.top = (e.pageY - yPos)  + 'px';
+  currBox.style.left = (e.pageX - xPos) + 'px';
   console.log("shit broke yo");
 }
