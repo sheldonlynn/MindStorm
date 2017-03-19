@@ -112,12 +112,23 @@ function drawBox(id, x, y, text) {
 function updateText(e) {
   var currBox = e.parentElement.parentElement;
   var textValue = currBox.firstChild.value;
+  updateArrayText(currBox, textValue);
   socket.emit('update text', {'id': currBox.id, 'text': textValue});
 }
 
 socket.on('update text', function(data) {
-    document.getElementById(data.id).firstChild.value = data.text;
+    var currBox = document.getElementById(data.id);
+    currBox.firstChild.value = data.text;
+    updateArrayText(currBox, data.text);
 });
+
+function updateArrayText(currBox, textValue) {
+  for(var i = 0; i < boxArray.length; i++) {
+    if (boxArray[i].id == currBox.id) {
+      boxArray[i].text = textValue;
+    }
+  }
+}
 
 var stopWatch;
 
