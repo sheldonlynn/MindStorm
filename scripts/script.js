@@ -88,6 +88,8 @@ function drawBox(id, x, y, text) {
   box.addEventListener('mouseup', mouseUp, false);
 
   board.appendChild(box);
+
+  box.firstChild.focus();
 }
 
 function updateText(e) {
@@ -147,7 +149,7 @@ function mouseDown(e) {
   currBox.style.zIndex = zIndex++ + "";
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
-    stopWatch = setInterval(function(){ testTimer() }, 42);
+  stopWatch = setInterval(function(){ testTimer() }, 42);
   board.addEventListener('mousemove', divMove, true);
 }
 
