@@ -36,6 +36,10 @@ io.on('connection', function(socket){
   socket.on('update text', function(data) {
     socket.broadcast.emit('update text', data);
   });
+  
+  socket.on('move box', function(box) {
+    socket.broadcast.emit('move box', box);
+  });
 });
 
 http.listen(3000, function(){

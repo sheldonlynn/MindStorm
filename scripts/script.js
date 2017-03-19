@@ -12,13 +12,6 @@ var boxArray = [
   //{"id": "box0", "x": 5, "y": 10, "text": "potato"}
 ];
 
-var diffArray = [];
-
-var wrapper = {
-  //index : 0
-  box : currBox
-};
-
 var socket = io();
 
 board.addEventListener('click', createBox, false);
@@ -97,8 +90,25 @@ function updateText(e) {
 }
 
 function mouseUp(e) {
-  wrapper.box = currBox;
+  var fuckSheldon = {
+    'id': currBox.id,
+    'x':  currBox.style.left,
+    'y':  currBox.style.top
+  }
+  socket.emit('move box', fuckSheldon);
+  socket.on('move box', function(box) {
+  changePos(box);
+  });
   board.removeEventListener('mousemove', divMove, true);
+}
+
+
+
+function changePos(box) {
+  var currBox = document.getElementById(box.id);
+  console.log(currBox);
+  currBox.style.left = box.x;
+  currBox.style.top = box.y;
 }
 
 function mouseDown(e) {
