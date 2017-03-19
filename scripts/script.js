@@ -103,9 +103,8 @@ function mouseUp(e) {
 }
 
 function changePos(box) {
-  var currBox;
-  currBox.style.left = box.x;
-  currBox.style.top = box.y;
+  box.style.left = box.x;
+  box.style.top = box.y;
 }
 
 function mouseDown(e) {
