@@ -99,12 +99,13 @@ body {
 
 svg {
   display: block;
-  font: 9em 'Montserrat';
+  font-family: avenir, 'century gothic', helvetica, arial, sans-serif;
+  font-size: 9em;
   width: 1200px;
   height: 400px;
   margin: 0 auto;
   position: absolute;
-  top: calc(50vh - (/* height */3.5em / 2));
+  top: calc(50vh - (/* height */4em / 2));
   left: calc(50vw - (/* width */1200px / 2));
   z-index: -99;
 }

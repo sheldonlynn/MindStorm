@@ -15,6 +15,18 @@ var boxArray = [
 
 var socket = io();
 
+window.onload = function() {
+  var svg = document.getElementById('logo');
+  console.log(svg);
+  svg.style.fontSize = window.innerWidth / 10;
+}
+
+window.onresize = function() {
+  var svg = document.getElementById('logo');
+  console.log(svg);
+  svg.style.fontSize = window.innerWidth / 10;
+}
+
 socket.on('update screen', function(boxes) {
   for(var i = 0; i < boxes.length; i++) {
     box = boxes[i];
