@@ -4,9 +4,9 @@ var xPos = 0;
 var yPos = 0;
 var currBox;
 var mouseHold = false;
-var textArea = '<textarea rows="9" cols="15"></textarea>';
+var textArea = '<textarea rows="8" cols="15"></textarea>';
 var actionButtons = '<div class="actionButtons"><button class="delete" onClick="deleteThisBox(this)">' +
-  'X</button><button class="post" onClick="buttonClick(this)">Y</button></div>';
+  'X</button><button class="post" onClick="updateText(this)">Y</button></div>';
 
 var boxArray = [
   //{"id": "box0", "x": 5, "y": 10, "text": "potato"}
@@ -39,6 +39,10 @@ function deleteThisBox(e) {
   var box = e.parentElement.parentElement;
   console.log(box.id, "box");
   socket.emit('delete box', box.id);
+  socket.on('delete box', function(box) {
+    console.log("is this happening?");
+    deleteBox(box);
+  });
   deleteBox(box.id);
 }
 
@@ -50,11 +54,6 @@ function deleteBox(currBoxId) {
   }
   document.getElementById(currBoxId).remove();
 }
-
-socket.on('delete box', function(box) {
-  console.log("is this happening?");
-  deleteBox(box);
-});
 
 function drawFromArray() {
   for (var i = 0; i < boxArray.length; i++) {
