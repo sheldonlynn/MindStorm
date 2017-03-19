@@ -5,12 +5,21 @@ var yPos = 0;
 var currBox;
 var mouseHold = false;
 var textArea = '<textarea rows="9" cols="15"></textarea>';
-var actionButtons = '<div class="actionButtons"><button class="post">Y</button></div>';
+var actionButtons = '<div class="actionButtons"><button class="post" onClick="buttonClick(this)">Y</button></div>';
 var boxArray = [{"id": "box0", "x": 5, "y": 10, "text": "potato"},
   {"id": "box1", "x": 75, "y": 30, "text": "potato"},
   {"id": "box2", "x": 5, "y": 200, "text": "potato"},
   {"id": "box3", "x": 200, "y": 200, "text": "potato"}];
-var diffArray = [];
+
+var socket = new WebSocket('ws://echo.websocket.org');
+
+socket.onopen = function(event) {
+  console.log("mufukkkaaa");
+};
+
+socket.onerror = function(error) {
+  console.log('WebSocket Error: ' + error);
+};
 
 var wrapper = {
   //index : 0
@@ -19,9 +28,21 @@ var wrapper = {
 
 board.addEventListener('click', createBox, false);
 
+function buttonClick(el) {
+  var currBox = el.parentElement.parentElement;
+  var textValue = currBox.firstChild.value;
+  socket.send(textValue);
+}
+
+socket.onmessage = function(event) {
+  var message = event.data;
+  console.log(message, "message received");
+};
+
 function createBox(e) {
   if (!mouseHold) {
-    drawBox("box" + boxArray.length, e.pageX, e.pageY, "potato");
+    drawBox("box" + boxArray.length, e.pageX, e.pageY, "");
+    boxArray.push({"id": ("box" + boxArray.length), "x": e.pageX, "y": e.pageY, "text": ""});
   }
   mouseHold = false;
 }
