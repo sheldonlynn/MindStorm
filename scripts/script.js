@@ -99,24 +99,14 @@ function updateText(e) {
 }
 
 function mouseUp(e) {
-  var boxCopy = {
-    'id': currBox.id,
-    'x':  currBox.style.left,
-    'y':  currBox.style.top
-  }
-  if (boxCopy != null) {
-    socket.emit('move box', boxCopy);
-    socket.on('move box', function(box) {
-    changePos(box);
-    });
-  }
+  
   board.removeEventListener('mousemove', divMove, true);
 }
 
 
 
 function changePos(box) {
-  var currBox = document.getElementById(box.id);
+  var currBox;
   currBox.style.left = box.x;
   currBox.style.top = box.y;
 }
@@ -135,6 +125,18 @@ function mouseDown(e) {
 function divMove(e) {
   currBox.style.left = (e.pageX - xPos) + 'px';
   currBox.style.top = (e.pageY - yPos)  + 'px';
+  
+  var boxCopy = {
+    'id': currBox.id,
+    'x':  currBox.style.left,
+    'y':  currBox.style.top
+  }
+  if (boxCopy != null) {
+    socket.emit('move box', boxCopy);
+    socket.on('move box', function(box) {
+    changePos(box);
+    });
+  }
 }
 
 
