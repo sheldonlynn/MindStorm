@@ -5,7 +5,8 @@ var yPos = 0;
 var currBox;
 var mouseHold = false;
 var textArea = '<textarea rows="9" cols="15"></textarea>';
-var actionButtons = '<div class="actionButtons"><button class="post" onClick="buttonClick(this)">Y</button></div>';
+var actionButtons = '<div class="actionButtons"><button class="delete" onClick="deleteThisBox(this)">' +
+  'X</button><button class="post" onClick="buttonClick(this)">Y</button></div>';
 
 var boxArray = [
   //{"id": "box0", "x": 5, "y": 10, "text": "potato"}
@@ -47,6 +48,27 @@ function createBox(e) {
   }
 }
 
+function deleteThisBox(e) {
+  var box = e.parentElement.parentElement;
+  console.log(box.id, "box");
+  socket.emit('delete box', box.id);
+  deleteBox(box.id);
+}
+
+function deleteBox(currBoxId) {
+  for (var i = 0; i < boxArray.length; i++){
+    if (boxArray[i].id == currBoxId){
+      boxArray[i].id = "removed";
+    }
+  }
+  document.getElementById(currBoxId).remove();
+}
+
+socket.on('delete box', function(box) {
+  console.log("is this happening?");
+  deleteBox(box);
+});
+
 function drawFromArray() {
   for (var i = 0; i < boxArray.length; i++) {
     var box = boxArray[i];
@@ -79,6 +101,9 @@ function mouseUp(e) {
 function mouseDown(e) {
   mouseHold = true;
   currBox = e.target;
+  if (currBox.className == "actionButtons") {
+    currBox = currBox.parentElement;
+  }
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
   board.addEventListener('mousemove', divMove, true);

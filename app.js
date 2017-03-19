@@ -27,6 +27,11 @@ io.on('connection', function(socket){
   socket.on('new box', function(boxes) {
     socket.broadcast.emit('new box', boxes);
   });
+
+  socket.on('delete box', function(box) {
+    console.log(box.id, 'beforebroadcast');
+    socket.broadcast.emit('delete box', box);
+  })
 });
 
 http.listen(3000, function(){

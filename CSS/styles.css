@@ -35,12 +35,21 @@ textArea {
 
 .actionButtons {
   width: 20px;
-  position: relative;
+  height: 10em;
   margin-right: 0.45em;
-  margin-top: 7em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .post {
   border: none;
   background: none;
+  margin-bottom: 0.5em;
+}
+
+.delete {
+  border: none;
+  background: none;
+  margin-top: 0.5em;
 }
