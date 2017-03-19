@@ -7,6 +7,7 @@ var boxArray = [];
 var timerStarted = false;
 var timerFinish = false;
 
+app.set('port', 3000);
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -14,12 +15,7 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   socket.emit('update screen', boxArray);
 
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-
   socket.on('send message', function(msg){
-    console.log('message: ' + msg);
     io.emit('send message', msg);
   });
 
@@ -69,6 +65,6 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(app.get('port'), function(){
+  console.log('listening on port', app.get('port'));
 });

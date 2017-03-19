@@ -18,13 +18,11 @@ var socket = io();
 
 window.onload = function() {
   var svg = document.getElementById('logo');
-  console.log(svg);
   svg.style.fontSize = window.innerWidth / 10;
 }
 
 window.onresize = function() {
   var svg = document.getElementById('logo');
-  console.log(svg);
   svg.style.fontSize = window.innerWidth / 10;
 }
 
@@ -79,7 +77,6 @@ function deleteBox(currBoxId) {
 }
 
 socket.on('delete box', function(box) {
-  console.log("is this happening?");
   deleteBox(box);
 });
 
@@ -139,7 +136,6 @@ function mouseUp() {
 }
 
 function testTimer() {
-  console.log("ayy");
   if (currBox != null) {
     var boxCopy = {
       'id': currBox.id,
@@ -165,7 +161,6 @@ function changePos(box) {
 function mouseDown(e) {
   mouseHold = true;
   currBox = e.target;
-  console.log(currBox);
   if (currBox.className == "actionButtons") {
     currBox = currBox.parentElement;
   } else {
@@ -198,7 +193,6 @@ socket.on('timer finish', function(timerFinish) {
 
 socket.on('update clock', function(time) {
   timerStarted = true;
-  console.log(time);
   if (time.seconds < 10) {
     document.getElementById('clock').innerHTML = time.minutes + ':0' + time.seconds;
   } else {
