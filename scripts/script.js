@@ -5,13 +5,10 @@ var yPos = 0;
 var currBox;
 var mouseHold = false;
 var textArea = '<textarea rows="9" cols="15"></textarea>';
-var actionButtons = '<div class="actionButtons"><button class="post">Y</button></div>';
+var actionButtons = '<div class="actionButtons"><button class="post" onClick="buttonClick(this)">Y</button></div>';
 
 var boxArray = [
-  {"id": "box0", "x": 5, "y": 10, "text": "potato"},
-  {"id": "box1", "x": 75, "y": 30, "text": "potato"},
-  {"id": "box2", "x": 5, "y": 200, "text": "potato"},
-  {"id": "box3", "x": 200, "y": 200, "text": "potato"}
+  //{"id": "box0", "x": 5, "y": 10, "text": "potato"}
 ];
 
 var diffArray = [];
@@ -21,14 +18,31 @@ var wrapper = {
   box : currBox
 };
 
+var socket = io();
+
 board.addEventListener('click', createBox, false);
+
+function buttonClick(el) {
+  var currBox = el.parentElement.parentElement;
+  var textValue = currBox.firstChild.value;
+  socket.emit('send message', textValue);
+}
 
 function createBox(e) {
   console.log(e.pageX + "createbox");
   if (timerStarted) {
     if (!mouseHold) {
-      drawBox("box" + boxArray.length, e.pageX, e.pageY, "potato");
-      boxArray.push({"id": ("box" + boxArray.length), "x": e.pageX, "y": e.pageY, "text": ""});
+      var val = Math.random();
+      drawBox("box" + boxArray.length, e.pageX, e.pageY, val);
+      boxArray.push({"id": ("box" + boxArray.length), "x": e.pageX, "y": e.pageY, "text": val});
+      socket.emit('new box', boxArray);
+      socket.on('new box', function(boxes) {
+        for(var i = boxArray.length; i < boxes.length; i++) {
+          box = boxes[i];
+          drawBox(box.id, box.x, box.y, box.text);
+          boxArray.push(box);
+        }
+      });
     }
     mouseHold = false;
   }
@@ -60,8 +74,6 @@ function drawBox(id, x, y, text) {
   board.appendChild(box);
 }
 
-
-
 function mouseUp(e) {
   wrapper.box = currBox;
   board.removeEventListener('mousemove', divMove, true);
@@ -82,8 +94,8 @@ function divMove(e) {
 }
 
 
-var seconds = 10;
-var minutes = 0;
+var seconds = 0;
+var minutes = 5;
 var watch = document.getElementById('h1');
 var start = document.getElementById('start');
 var timerStarted;
@@ -100,20 +112,20 @@ function countDown() {
   } else {
     document.getElementById('clock').innerHTML = minutes + ":" + seconds;
   }
-  
+
   if (seconds == 0 && minutes == 0) {
     seconds = 10;
     minutes = 0;
     timerStarted = false;
     document.getElementById('clock').innerHTML = "Time's up";
-    
+
     var textareas = document.getElementsByTagName("textarea");
-    
+
     for (var i = 0; i < textareas.length; i++) {
       textareas[i].readOnly = true;
     }
     return;
-  
+
   }
   timer();
 }

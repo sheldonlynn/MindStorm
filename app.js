@@ -7,6 +7,7 @@ var path = require('path');
 var fs = require('fs');
 var lineReader = require('readline');
 
+var boxArray = [];
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -23,6 +24,9 @@ io.on('connection', function(socket){
     io.emit('send message', msg);
   });
 
+  socket.on('new box', function(boxes) {
+    socket.broadcast.emit('new box', boxes);
+  });
 });
 
 http.listen(3000, function(){
