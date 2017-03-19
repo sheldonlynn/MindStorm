@@ -29,7 +29,6 @@ function buttonClick(el) {
 }
 
 function createBox(e) {
-  console.log(e.pageX + "createbox");
   if (timerStarted) {
     if (!mouseHold) {
       var val = Math.random();
@@ -51,13 +50,11 @@ function createBox(e) {
 function drawFromArray() {
   for (var i = 0; i < boxArray.length; i++) {
     var box = boxArray[i];
-    console.log(box, "box");
     drawBox(box.id, box.x + "px", box.y + "px", box.text);
   }
 }
 
 function drawBox(id, x, y, text) {
-  console.log(x + "drawbox");
   var box = document.createElement('div');
   box.innerHTML = textArea + actionButtons;
   box.style.left = x + "px";
@@ -82,7 +79,6 @@ function mouseUp(e) {
 function mouseDown(e) {
   mouseHold = true;
   currBox = e.target;
-  console.log(e.pageX + "mousedown");
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
   board.addEventListener('mousemove', divMove, true);
