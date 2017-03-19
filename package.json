@@ -1,9 +1,11 @@
 {
   "name": "MindStorm",
-  "version": "0.1",
+  "version": "0.5",
   "description": "Realtime collaboration and brainstorming",
   "repository": "git@github.com:sheldonlynn/MindStorm",
-  "author": "",
+  "author": "Tyler Da Costa github.com/dacosta-t
+              Connor Goude github.com/freakinhippies
+              Sheldon Lynn github.com/sheldonlynn",
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {

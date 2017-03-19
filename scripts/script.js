@@ -177,7 +177,7 @@ function mouseDown(e) {
   currBox.style.zIndex = zIndex++ + "";
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
-  stopWatch = setInterval(function(){ testTimer() }, 42);
+  stopWatch = setInterval(function(){ testTimer() }, 30);
   board.addEventListener('mousemove', divMove, true);
 }
 
