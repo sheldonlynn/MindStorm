@@ -15,8 +15,7 @@ body {
   width: 10em;
   height: 10em;
   position: absolute;
-  background-color: white;
-  border: solid 1px black;
+  background-color: #ffffa5;
   justify-content: space-between;
   -webkit-box-shadow: 5px 5px 22px 1px rgba(41,41,41,0.39);
   -moz-box-shadow: 5px 5px 22px 1px rgba(41,41,41,0.39);
@@ -27,7 +26,8 @@ textArea {
   overflow: auto;
   resize: none;
   border: none;
-  border-right: solid 1px #666;
+  border-right: solid 1px #d8d893;
+  background-color: #ffffa5;
 }
 
 .actionButtons {

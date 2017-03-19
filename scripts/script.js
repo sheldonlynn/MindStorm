@@ -6,6 +6,8 @@ var currBox;
 var mouseHold = false;
 var textArea = '<textarea rows="9" cols="15">pls fill me bb</textarea>';
 var actionButtons = '<div class="actionButtons"><button class="post">Y</button></div>';
+var boxArray = [];
+var diffArray = [];
 
 var wrapper = {
   //index : 0
@@ -31,6 +33,12 @@ function createBox(e) {
   }
   mouseHold = false;
 }
+
+function drawBox(x, y, text) {
+
+}
+
+
 
 function mouseUp(e) {
   wrapper.box = currBox;
