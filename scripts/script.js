@@ -99,21 +99,8 @@ function updateText(e) {
 }
 
 function mouseUp(e) {
-  var boxCopy = {
-    'id': currBox.id,
-    'x':  currBox.style.left,
-    'y':  currBox.style.top
-  }
-  if (boxCopy != null) {
-    socket.emit('move box', boxCopy);
-    socket.on('move box', function(box) {
-    changePos(box);
-    });
-  }
   board.removeEventListener('mousemove', divMove, true);
 }
-
-
 
 function changePos(box) {
   var currBox = document.getElementById(box.id);
@@ -126,7 +113,10 @@ function mouseDown(e) {
   currBox = e.target;
   if (currBox.className == "actionButtons") {
     currBox = currBox.parentElement;
+  } else if (currBox.nodeName.toLowerCase() == 'textarea') {
+    currBox = currBox.parentElement.parentElement;
   }
+
   xPos = e.pageX - currBox.offsetLeft;
   yPos = e.pageY - currBox.offsetTop;
   board.addEventListener('mousemove', divMove, true);
@@ -138,8 +128,8 @@ function divMove(e) {
 }
 
 
-var seconds = 0;
-var minutes = 5;
+var seconds = 59;
+var minutes = 0;
 var watch = document.getElementById('h1');
 var start = document.getElementById('start');
 var timerStarted;
