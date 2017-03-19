@@ -3,17 +3,14 @@ var app = express();
 app.use('/', express.static(__dirname + '/'));
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var path = require('path');
-var fs = require('fs');
-var lineReader = require('readline');
-
 var boxArray = [];
+
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  socket.emit('update screen', boxArray);
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -25,12 +22,17 @@ io.on('connection', function(socket){
   });
 
   socket.on('new box', function(boxes) {
+    boxArray = boxes;
     socket.broadcast.emit('new box', boxes);
   });
 
-  socket.on('delete box', function(box) {
-    console.log(box.id, 'beforebroadcast');
-    socket.broadcast.emit('delete box', box);
+  socket.on('delete box', function(boxId) {
+    for (var i = 0; i < boxArray.length; i++) {
+      if (boxId == boxArray[i].id) {
+        boxArray[i].id = 'removed';
+      }
+    }
+    socket.broadcast.emit('delete box', boxId);
   })
 
   socket.on('update text', function(data) {
