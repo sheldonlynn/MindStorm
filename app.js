@@ -45,8 +45,8 @@ io.on('connection', function(socket){
     socket.broadcast.emit('move box', box);
   });
 
-  var seconds = 5;
-  var minutes = 0;
+  var seconds = 0;
+  var minutes = 5;
 
   socket.on('timer start', function() {
     if (!timerStarted) {
