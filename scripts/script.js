@@ -17,7 +17,7 @@ var socket = io();
 socket.on('update screen', function(boxes) {
   for(var i = 0; i < boxes.length; i++) {
     box = boxes[i];
-    if(box.id != 'removed') {
+    if(!box.deleted) {
       drawBox(box.id, box.x, box.y, box.text);
       boxArray.push(box);
     }
@@ -31,7 +31,7 @@ function createBox(e) {
     if (!mouseHold) {
       var val = Math.random();
       drawBox('box' + boxArray.length, e.pageX, e.pageY, val);
-      boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': val});
+      boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': val, 'deleted': false});
       socket.emit('new box', boxArray);
       socket.on('new box', function(boxes) {
         for(var i = boxArray.length; i < boxes.length; i++) {
@@ -47,23 +47,23 @@ function createBox(e) {
 
 function deleteThisBox(e) {
   var box = e.parentElement.parentElement;
-  console.log(box.id, "box");
   socket.emit('delete box', box.id);
-  socket.on('delete box', function(box) {
-    console.log("is this happening?");
-    deleteBox(box);
-  });
   deleteBox(box.id);
 }
 
 function deleteBox(currBoxId) {
   for (var i = 0; i < boxArray.length; i++){
     if (boxArray[i].id == currBoxId){
-      boxArray[i].id = 'removed';
+      boxArray[i].removed = true;
     }
   }
   document.getElementById(currBoxId).remove();
 }
+
+socket.on('delete box', function(box) {
+  console.log("is this happening?");
+  deleteBox(box);
+});
 
 function drawFromArray() {
   for (var i = 0; i < boxArray.length; i++) {
