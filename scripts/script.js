@@ -24,6 +24,7 @@ var wrapper = {
 board.addEventListener('click', createBox, false);
 
 function createBox(e) {
+  console.log(e.pageX + "createbox");
   if (timerStarted) {
     if (!mouseHold) {
       drawBox("box" + boxArray.length, e.pageX, e.pageY, "potato");
@@ -42,10 +43,11 @@ function drawFromArray() {
 }
 
 function drawBox(id, x, y, text) {
+  console.log(x + "drawbox");
   var box = document.createElement('div');
   box.innerHTML = textArea + actionButtons;
-  box.style.left = x;
-  box.style.top = y;
+  box.style.left = x + "px";
+  box.style.top = y + "px";
 
   box.firstChild.value = text;
 
@@ -68,8 +70,9 @@ function mouseUp(e) {
 function mouseDown(e) {
   mouseHold = true;
   currBox = e.target;
-  xPos = e.clientX - currBox.offsetLeft;
-  yPos = e.clientY - currBox.offsetTop;
+  console.log(e.pageX + "mousedown");
+  xPos = e.pageX - currBox.offsetLeft;
+  yPos = e.pageY - currBox.offsetTop;
   board.addEventListener('mousemove', divMove, true);
 }
 
