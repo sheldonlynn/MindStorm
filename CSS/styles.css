@@ -9,9 +9,35 @@ body {
 }
 
 .box {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    background-color: white;
-    border: solid 1px black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 10em;
+  height: 10em;
+  position: absolute;
+  background-color: white;
+  border: solid 1px black;
+  justify-content: space-between;
+  -webkit-box-shadow: 5px 5px 22px 1px rgba(41,41,41,0.39);
+  -moz-box-shadow: 5px 5px 22px 1px rgba(41,41,41,0.39);
+  box-shadow: 5px 5px 22px 1px rgba(41,41,41,0.39);
+}
+
+textArea {
+  overflow: auto;
+  resize: none;
+  border: none;
+  border-right: solid 1px #666;
+}
+
+.actionButtons {
+  width: 20px;
+  position: relative;
+  margin-right: 0.45em;
+  margin-top: 7em;
+}
+
+.post {
+  border: none;
+  background: none;
 }
