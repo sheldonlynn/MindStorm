@@ -27,6 +27,10 @@ io.on('connection', function(socket){
   socket.on('new box', function(boxes) {
     socket.broadcast.emit('new box', boxes);
   });
+
+  socket.on('update text', function(data) {
+    socket.broadcast.emit('update text', data);
+  });
 });
 
 http.listen(3000, function(){
