@@ -6,10 +6,14 @@ var currBox;
 var mouseHold = false;
 var textArea = '<textarea rows="9" cols="15"></textarea>';
 var actionButtons = '<div class="actionButtons"><button class="post">Y</button></div>';
-var boxArray = [{"id": "box0", "x": 5, "y": 10, "text": "potato"},
+
+var boxArray = [
+  {"id": "box0", "x": 5, "y": 10, "text": "potato"},
   {"id": "box1", "x": 75, "y": 30, "text": "potato"},
   {"id": "box2", "x": 5, "y": 200, "text": "potato"},
-  {"id": "box3", "x": 200, "y": 200, "text": "potato"}];
+  {"id": "box3", "x": 200, "y": 200, "text": "potato"}
+];
+
 var diffArray = [];
 
 var wrapper = {
@@ -20,10 +24,13 @@ var wrapper = {
 board.addEventListener('click', createBox, false);
 
 function createBox(e) {
-  if (!mouseHold) {
-    drawBox("box" + boxArray.length, e.pageX, e.pageY, "potato");
+  if (timerStarted) {
+    if (!mouseHold) {
+      drawBox("box" + boxArray.length, e.pageX, e.pageY, "potato");
+      boxArray.push({"id": ("box" + boxArray.length), "x": e.pageX, "y": e.pageY, "text": ""});
+    }
+    mouseHold = false;
   }
-  mouseHold = false;
 }
 
 function drawFromArray() {
@@ -54,20 +61,70 @@ function drawBox(id, x, y, text) {
 
 
 function mouseUp(e) {
-  wrapper.box = currBox;
-  console.log(wrapper.box.style.left + "wrapper box");
-  board.removeEventListener('mousemove', divMove, true);
+  if (timerStarted) {
+    wrapper.box = currBox;
+    board.removeEventListener('mousemove', divMove, true);
+  }
 }
 
 function mouseDown(e) {
-  mouseHold = true;
-  currBox = e.target;
-  xPos = e.clientX - currBox.offsetLeft;
-  yPos = e.clientY - currBox.offsetTop;
-  board.addEventListener('mousemove', divMove, true);
+  if (timerStarted) {
+    mouseHold = true;
+    currBox = e.target;
+    xPos = e.clientX - currBox.offsetLeft;
+    yPos = e.clientY - currBox.offsetTop;
+    board.addEventListener('mousemove', divMove, true);
+  }
 }
 
 function divMove(e) {
   currBox.style.left = (e.pageX - xPos) + 'px';
   currBox.style.top = (e.pageY - yPos)  + 'px';
+}
+
+
+var seconds = 10;
+var minutes = 0;
+var watch = document.getElementById('h1');
+var start = document.getElementById('start');
+var timerStarted;
+
+
+function countDown() {
+  seconds--;
+  if (seconds < 0 && minutes > 0) {
+    seconds = 59;
+    minutes--;
+  }
+  if (seconds < 10) {
+    document.getElementById('clock').innerHTML = minutes + ":0" + seconds;
+  } else {
+    document.getElementById('clock').innerHTML = minutes + ":" + seconds;
+  }
+  
+  if (seconds == 0 && minutes == 0) {
+    seconds = 10;
+    minutes = 0;
+    timerStarted = false;
+    document.getElementById('clock').innerHTML = "Time's up";
+    
+    var textareas = document.getElementsByTagName("textarea");
+    
+    for (var i = 0; i < textareas.length; i++) {
+      textareas[i].readOnly = true;
+    }
+    return;
+  
+  }
+  timer();
+}
+
+start.onclick = function() {
+  if (!timerStarted)
+    timer();
+}
+
+function timer() {
+  timerStarted = true;
+  setTimeout(countDown, 1000);
 }
