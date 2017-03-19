@@ -89,15 +89,17 @@ function updateText(e) {
 }
 
 function mouseUp(e) {
-  var fuckSheldon = {
+  var boxCopy = {
     'id': currBox.id,
     'x':  currBox.style.left,
     'y':  currBox.style.top
+  } 
+  if (boxCopy != null) {
+    socket.emit('move box', boxCopy);
+    socket.on('move box', function(box) {
+    changePos(box);
+    });
   }
-  socket.emit('move box', fuckSheldon);
-  socket.on('move box', function(box) {
-  changePos(box);
-  });
   board.removeEventListener('mousemove', divMove, true);
 }
 
@@ -105,7 +107,6 @@ function mouseUp(e) {
 
 function changePos(box) {
   var currBox = document.getElementById(box.id);
-  console.log(currBox);
   currBox.style.left = box.x;
   currBox.style.top = box.y;
 }
@@ -165,10 +166,9 @@ function countDown() {
 
 start.onclick = function() {
   if (!timerStarted)
-    timer();
+    setTimeout(countDown, 1000);
 }
 
 function timer() {
   timerStarted = true;
-  setTimeout(countDown, 1000);
 }
