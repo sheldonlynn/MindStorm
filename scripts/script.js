@@ -13,6 +13,7 @@ var boxArray = [
   //{"id": "box0", "x": 5, "y": 10, "text": "potato"}
 ];
 
+var timerFinished;
 var socket = io();
 
 window.onload = function() {
@@ -39,25 +40,29 @@ socket.on('update screen', function(boxes) {
 
 board.addEventListener('click', createBox, false);
 
+socket.on('loaded', function(timerFinish) {
+  timerFinished = timerFinish;
+});
+
 function createBox(e) {
-  if (timerStarted) {
+  if (!timerFinished || timerStarted) {
     if (!mouseHold) {
       drawBox('box' + boxArray.length, e.pageX, e.pageY, '');
       boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': '', 'deleted': false});
       socket.emit('new box', boxArray);
-      
+
     }
     mouseHold = false;
   }
 }
 socket.on('new box', function(boxes) {
-        for(var i = boxArray.length; i < boxes.length; i++) {
-          box = boxes[i];
-          drawBox(box.id, box.x, box.y, box.text);
-          boxArray.push(box);
-        }
-      });
-      
+  for(var i = boxArray.length; i < boxes.length; i++) {
+    box = boxes[i];
+    drawBox(box.id, box.x, box.y, box.text);
+    boxArray.push(box);
+  }
+});
+
 function deleteThisBox(e) {
   var box = e.parentElement.parentElement;
   socket.emit('delete box', box.id);
@@ -113,7 +118,7 @@ function updateText(e) {
 socket.on('update text', function(data) {
     document.getElementById(data.id).firstChild.value = data.text;
 });
-  
+
 var stopWatch;
 
 function mouseUp() {
@@ -146,8 +151,6 @@ function changePos(box) {
   }
 }
 
-
-
 function mouseDown(e) {
   mouseHold = true;
   currBox = e.target;
@@ -172,40 +175,31 @@ function divMove(e) {
   currBox.style.top = (e.pageY - yPos)  + 'px';
 }
 
-
-var seconds = 59;
-var minutes = 0;
-var watch = document.getElementById('h1');
-var start = document.getElementById('start');
 var timerStarted;
 
 start.onclick = function() {
-  if (!timerStarted) {
-    timerStarted = true;
-    var timer = setInterval(function() {
-      seconds--;
-      if (seconds < 0 && minutes > 0) {
-        seconds = 59;
-        minutes--;
-      }
-      if (seconds < 10) {
-        document.getElementById('clock').innerHTML = minutes + ':0' + seconds;
-      } else {
-        document.getElementById('clock').innerHTML = minutes + ':' + seconds;
-      }
-
-      if (seconds <= 0 && minutes <= 0) {
-        timerStarted = false;
-        clearInterval(timer);
-        document.getElementById('clock').innerHTML = "Time's up";
-
-        var textareas = document.getElementsByTagName('textarea');
-
-        for (var i = 0; i < textareas.length; i++) {
-          textareas[i].readOnly = true;
-        }
-        return;
-      }
-    }, 1000);
-  }
+  socket.emit('timer start');
 }
+
+socket.on('timer finish', function(timerFinish) {
+  timerFinished = timerFinish;
+});
+
+socket.on('update clock', function(time) {
+  console.log(time);
+  if (time.seconds < 10) {
+    document.getElementById('clock').innerHTML = time.minutes + ':0' + time.seconds;
+  } else {
+    document.getElementById('clock').innerHTML = time.minutes + ':' + time.seconds;
+  }
+  if (time.seconds <= 0 && time.minutes <= 0) {
+    document.getElementById('clock').innerHTML = "Time's up";
+
+    var textareas = document.getElementsByTagName('textarea');
+
+    for (var i = 0; i < textareas.length; i++) {
+      textareas[i].readOnly = true;
+    }
+    return;
+  }
+});

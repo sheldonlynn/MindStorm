@@ -4,6 +4,8 @@ app.use('/', express.static(__dirname + '/'));
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var boxArray = [];
+var timerStarted = false;
+var timerFinish = false;
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -38,9 +40,32 @@ io.on('connection', function(socket){
   socket.on('update text', function(data) {
     socket.broadcast.emit('update text', data);
   });
-  
+
   socket.on('move box', function(box) {
     socket.broadcast.emit('move box', box);
+  });
+
+  var seconds = 5;
+  var minutes = 0;
+
+  socket.on('timer start', function() {
+    if (!timerStarted) {
+    timerStarted = true;
+    var timer = setInterval(function() {
+        seconds--;
+        if (seconds < 0 && minutes > 0) {
+          seconds = 59;
+          minutes--;
+        }
+        io.emit('update clock', {'minutes': minutes, 'seconds': seconds});
+
+        if (seconds <= 0 && minutes <= 0) {
+          timerFinish = true;
+          io.emit('timer finish', timerFinish);
+          clearInterval(timer);
+        }
+      }, 1000);
+    }
   });
 });
 
