@@ -32,6 +32,10 @@ io.on('connection', function(socket){
     console.log(box.id, 'beforebroadcast');
     socket.broadcast.emit('delete box', box);
   })
+
+  socket.on('update text', function(data) {
+    socket.broadcast.emit('update text', data);
+  });
 });
 
 http.listen(3000, function(){

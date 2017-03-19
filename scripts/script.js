@@ -23,18 +23,12 @@ var socket = io();
 
 board.addEventListener('click', createBox, false);
 
-function buttonClick(el) {
-  var currBox = el.parentElement.parentElement;
-  var textValue = currBox.firstChild.value;
-  socket.emit('send message', textValue);
-}
-
 function createBox(e) {
   if (timerStarted) {
     if (!mouseHold) {
       var val = Math.random();
-      drawBox("box" + boxArray.length, e.pageX, e.pageY, val);
-      boxArray.push({"id": ("box" + boxArray.length), "x": e.pageX, "y": e.pageY, "text": val});
+      drawBox('box' + boxArray.length, e.pageX, e.pageY, val);
+      boxArray.push({'id': ('box' + boxArray.length), 'x': e.pageX, 'y': e.pageY, 'text': val});
       socket.emit('new box', boxArray);
       socket.on('new box', function(boxes) {
         for(var i = boxArray.length; i < boxes.length; i++) {
@@ -72,25 +66,34 @@ socket.on('delete box', function(box) {
 function drawFromArray() {
   for (var i = 0; i < boxArray.length; i++) {
     var box = boxArray[i];
-    drawBox(box.id, box.x + "px", box.y + "px", box.text);
+    drawBox(box.id, box.x + 'px', box.y + 'px', box.text);
   }
 }
 
 function drawBox(id, x, y, text) {
   var box = document.createElement('div');
   box.innerHTML = textArea + actionButtons;
-  box.style.left = x + "px";
-  box.style.top = y + "px";
+  box.style.left = x + 'px';
+  box.style.top = y + 'px';
 
   box.firstChild.value = text;
 
   box.id = id;
-  box.className = "box";
+  box.className = 'box';
 
   box.addEventListener('mousedown', mouseDown, false);
   box.addEventListener('mouseup', mouseUp, false);
 
   board.appendChild(box);
+}
+
+function updateText(e) {
+  var currBox = e.parentElement.parentElement;
+  var textValue = currBox.firstChild.value;
+  socket.emit('update text', {'id': currBox.id, 'text': textValue});
+  socket.on('update text', function(data) {
+    document.getElementById(data.id).firstChild.value = data.text;
+  });
 }
 
 function mouseUp(e) {
@@ -129,9 +132,9 @@ function countDown() {
     minutes--;
   }
   if (seconds < 10) {
-    document.getElementById('clock').innerHTML = minutes + ":0" + seconds;
+    document.getElementById('clock').innerHTML = minutes + ':0' + seconds;
   } else {
-    document.getElementById('clock').innerHTML = minutes + ":" + seconds;
+    document.getElementById('clock').innerHTML = minutes + ':' + seconds;
   }
 
   if (seconds == 0 && minutes == 0) {
@@ -140,7 +143,7 @@ function countDown() {
     timerStarted = false;
     document.getElementById('clock').innerHTML = "Time's up";
 
-    var textareas = document.getElementsByTagName("textarea");
+    var textareas = document.getElementsByTagName('textarea');
 
     for (var i = 0; i < textareas.length; i++) {
       textareas[i].readOnly = true;
